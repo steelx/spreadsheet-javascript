@@ -12,6 +12,27 @@
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
+    
+    <style type="text/css">
+	section {width:800px; margin:20px auto;}
+	section h1 { margin:5px;}
+	#content { display: block; margin:0; padding:0; list-style:none; width:100%;}
+	#content li { background:#8FCF7C; padding:10px; margin:5px;}
+	#content li h3 { color:#CC4361; font-size:1em; font-weight:700; margin:0;}
+	#content li a { color:#5CBFCC;}
+	#content li p { color: #333; font-size:0.8em;}
+	.clearfix:after {
+	     visibility: hidden;
+	     display: block;
+	     font-size: 0;
+	     content: " ";
+	     clear: both;
+	     height: 0;
+	     }
+	.clearfix { display: inline-block; }
+	* html .clearfix { height: 1%; }
+	.clearfix { display: block; }
+	</style>
   </head>
   <body>
     <div class="wrapper">
@@ -39,6 +60,10 @@ $ git fetch origin
 $ git checkout gh-pages
 </code></pre>
 
+<ul id="content" class="clearfix">
+    
+</ul>
+
 <p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
 
 <h3>Designer Templates</h3>
@@ -61,7 +86,38 @@ $ git checkout gh-pages
         <p><small>Hosted on <a href="https://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
       </footer>
     </div>
-    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
-		
-  </body>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->	
+
+<script id="aj-template" type="text/x-handlebars-template">
+	<li>
+		<h3>Hello, I'm {{name}}</h3>
+		<p>And my age is {{age}}</p>
+		<p>{{description}}</p>
+	</li>
+</script>
+
+<script type="text/javascript" src="handlebars.js"></script>
+<script type="text/javascript" src="jquery.min.js"></script>
+<script type="text/javascript" src="tabletop.js"></script>
+<script type="text/javascript">
+	var public_spreadsheet_url = 'https://docs.google.com/spreadsheet/pub?key=0Ate-jfPFLoagdGFsNkk1R05jRGlIa0I3b2RtVXdVU3c&output=html';
+	$(function() {
+     Tabletop.init({ 
+			key: public_spreadsheet_url,
+			callback: showInfo,
+			parseNumbers: true });
+    });//dom ready
+	
+	function showInfo(data, tabletop) {
+        var source   = $("#aj-template").html();
+        var template = Handlebars.compile(source);
+
+        $.each( tabletop.sheets("Ryr").all(), function(i, profile) {
+          var html = template(profile);
+          $("#content").append(html);
+        });
+    };
+
+</script>	
+</body>
 </html>
